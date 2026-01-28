@@ -1,0 +1,124 @@
+workflow:
+  title: Ripple Transaction
+  description: This workflow guides you through a transaction with Ripple through CoreIgnite from start to end with the Buyer via FI.
+  category: Blockchain
+  icon: network-3
+
+cards:
+  - id: card1
+    title: Initiate purchase
+    badge: "1"
+    description: "The Buyer or Wealth manager initiates a purchase on the Wealth Management FI system."
+    tags:
+      - label: Buyer
+        color: "#DDE1E6"
+      - label: Wealth Manager
+        color: "#DDE1E6"
+      - label: Wealth Management FI
+        color: "#DDE1E6"
+    arrows:
+      - direction: down
+        targetCardId: card2
+
+  - id: card2
+    title: Verify available balance
+    badge: "2"
+    description: ""
+    tags:
+      - label: Wealth Management FI
+        color: "#DDE1E6"
+      - label: CoreIgnite
+        color: "#DDE1E6"
+      - label: Hogan
+        color: "#DDE1E6"
+    arrows:
+      - direction: down
+        targetCardId: card3
+    sections:
+      direction: row
+      items:
+        - title: Wealth Management FI
+          badge: ""
+          icon: piggy-bank
+          description: "The Wealth Management FI system calls a CoreIgnite API to get the fiat DDA balance."
+        - title: CoreIgnite
+          badge: ""
+          icon: fragment
+          description: "CoreIgnite calls a Hogan Core API to get this balance. If the available balance is sufficient, flow progresses."
+
+  - id: card3
+    title: Request stable coin purchase
+    badge: "3"
+    description: "The Wealth Management FI system calls a CoreIgnite API to request the stable coin purchase."
+    tags:
+      - label: Wealth Management FI
+        color: "#DDE1E6"
+      - label: CoreIgnite
+        color: "#DDE1E6"
+      - label: Hogan
+        color: "#DDE1E6"
+      - label: Ripple
+        color: "#DDE1E6"
+    arrows:
+      - direction: down
+        targetCardId: card4
+    sections:
+      direction: row
+      items:
+        - title: CoreIgnite
+          badge: ""
+          icon: fragment
+          description: ""
+          sections:
+            direction: col
+            items:
+              - title: Debit buyer fiat DDA
+                badge: "3.1.1"
+                description: "CoreIgnite calls a Hogan Core API to debit the buyer's fiat DDA for the fiat purchase amount."
+              - title: Credit buyer fiat linked account
+                badge: "3.1.2"
+                description: "CoreIgnite calls a Ripple Custody API to credit the fiat funds to the buyer's fiat linked account at Ripple."
+              - title: Reserve deposit fiat funds
+                badge: "3.1.3"
+                description: "CoreIgnite calls a Ripple Custody API to reserve funds for the purchase in the buyer's fiat linked account at Ripple."
+              - title: Purchase RLUSD on XRP
+                badge: "3.1.4"
+                description: "CoreIgnite calls a Ripple Custody API to purchase the specified amount of RLUSD stablecoin on the XRP blockchain network."
+        - title: Ripple Custody
+          badge: ""
+          icon: money
+          description: ""
+          sections:
+            direction: col
+            items:
+              - title: Mint RLUSD on XRP
+                badge: "3.2.1"
+                description: "Ripple Custody mints the specified amount of RLUSD stablecoin on the XRP blockchain network."
+              - title: Settle RLUSD with XRP
+                badge: "3.2.2"
+                description: "RLUSD tokens are moved or allocated from Ripple's institutional wallet to the Buyer's wallet. If the Buyer has their own crypto custodian, the RLUSD is moved to the buyer's Custodian's wallet and the Custodian will take further steps to allocate the tokens to the Buyer."
+        - title: CoreIgnite
+          badge: ""
+          icon: fragment
+          description: ""
+          sections:
+            direction: col
+            items:
+              - title: Verify wallet balance
+                badge: "3.3.1"
+                description: "CoreIgnite calls a Ripple Custody API to verify that the new balance in the Buyer's wallet is as expected."
+              - title: Log transaction and capture event
+                badge: "3.3.2"
+                description: "CoreIgnite logs the transaction for audit trail and reconciliation. At the same time, CoreIgnite posts a transaction event."
+
+  - id: card4
+    title: Notify Buyer of settlement
+    badge: "4"
+    description: "CoreIgnite responds to the stablecoin purchase request at the Wealth Management FI system and sends notification of the settlement to the buyer."
+    tags:
+      - label: CoreIgnite
+        color: "#DDE1E6"
+      - label: Wealth Management FI
+        color: "#DDE1E6"
+      - label: Buyer
+        color: "#DDE1E6"
